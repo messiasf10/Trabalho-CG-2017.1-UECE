@@ -1,0 +1,27 @@
+GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0};
+	GLfloat luzDifusa[4]={0.7,0.7,0.7,1.0};	   // "cor"
+	GLfloat luzEspecular[4]={1.0, 1.0, 1.0, 1.0};// "brilho"
+	GLfloat posicaoLuz[4]={.0, .0, 0, 1.0};
+
+	// Capacidade de brilho do material
+	GLfloat especularidade[4]={1.0,1.0,1.0,1.0};
+	GLint especMaterial = 60;
+
+ 	// Especifica que a cor de fundo da janela sera' preta
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+	glShadeModel(GL_SMOOTH);// Habilita o modelo de colorizacao de Gouraud
+	glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);// Define a refletancia do material
+	glMateriali(GL_FRONT,GL_SHININESS,especMaterial);// Define a concentracao do brilho
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);// Ativa o uso da luz ambiente
+
+	// Define os parametros da luz de numero 0
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente);
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa );
+	glLightfv(GL_LIGHT0, GL_SPECULAR, luzEspecular );
+	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
+
+	glEnable(GL_COLOR_MATERIAL);// Habilita a definicao da cor do material a partir da cor corrente
+	glEnable(GL_LIGHTING);//Habilita o uso de iluminacao
+	glEnable(GL_LIGHT0);// Habilita a luz de numero 0
+	glEnable(GL_DEPTH_TEST);// Habilita o depth-buffering
