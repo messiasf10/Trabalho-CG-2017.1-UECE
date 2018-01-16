@@ -1,4 +1,3 @@
-#include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <GL/glut.h>
@@ -13,13 +12,13 @@ GLfloat angle, fAspect,x,z,c=1;
 
 GLfloat xTerra=10,zTerra=10;
 
-GLint rox=30,roy=0,roz=0,ang;
+GLint rox=0, roy=0 , roz=0,ang;
 static int year = 0, day = 0, wire = 0;
 float teta=0;
 float tetaTerra=0;
 
-double rotationX = 20.0;
-double rotationY = 20.0;
+double rotationX = 0.0;
+double rotationY = 0.0;
 
 int last_press_x = 0;
 int last_press_y = 0;
@@ -150,10 +149,13 @@ void Desenha(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(0.0f, 0.0f, 0.0f);
 
-    /* Rotaciona os objetos para visualizar a 3 dimensão */
+	glMatrixMode(GL_PROJECTION);
+    /* Rotaciona os objetos para visualizar a 3 dimensï¿½o */
 	glRotatef(rotationY, 1.0, 0.0, 0.0); /* Rotaciona em torno do X */
 	glRotatef(rotationX, 0.0, 1.0, 0.0); /* Rotaciona em torno de Y */
+	glTranslatef(rox,roy,roz);
 
+	glMatrixMode(GL_MODELVIEW);
     Desenha_Estrelas();
 	Desenha_Origem();
 	Desenha_Eixos_Coordenados();
@@ -212,7 +214,7 @@ void Inicializa (void)
 	GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0};
 	GLfloat luzDifusa[4]={0.7,0.7,0.7,1.0};	   // "cor"
 	GLfloat luzEspecular[4]={1.0, 1.0, 1.0, 1.0};// "brilho"
-	GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
+	GLfloat posicaoLuz[4]={.0, .0, 0, 1.0};
 
 	// Capacidade de brilho do material
 	GLfloat especularidade[4]={1.0,1.0,1.0,1.0};
@@ -227,8 +229,8 @@ void Inicializa (void)
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);// Ativa o uso da luz ambiente
 
 	// Define os parametros da luz de numero 0
-	glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa );
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente);
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa );
 	glLightfv(GL_LIGHT0, GL_SPECULAR, luzEspecular );
 	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
 
@@ -248,12 +250,13 @@ void EspecificaParametrosVisualizacao(void)
 	gluPerspective(angle,fAspect,0.4,500);// Especifica a projecao perspectiva
 	glMatrixMode(GL_MODELVIEW);// Especifica sistema de coordenadas do modelo
 	glLoadIdentity();// Inicializa sistema de coordenadas do modelo
-	gluLookAt(0.0, 0.0, 30.0,		/* eye */
+	gluLookAt(30.0, 0.0, 0.0,		/* eye */
     		  0.0, 0.0, 0.0,		/* look */
     		  0.0, 1.0, 0.0);		/* up */
-	//if (rox>0) gluLookAt(0,rox,1, 0,0,0, 0,1,0);
-	//else gluLookAt(0,0,rox, 0,0,0, 0,1,0);
-	//gluLookAt(rox,roy,roz, 0,0,0, 0,1,0);
+	// if (rox>0) gluLookAt(rox,roy,roz, 0,0,0, 0,1,0);
+	// else gluLookAt(0,0,rox, 0,0,0, 0,1,0);
+	// gluLookAt(rox,roy,roz, 0,0,0, 0,1,0);
+	
 }
 
 void AlteraTamanhoJanela(GLsizei w, GLsizei h)
@@ -275,7 +278,7 @@ void GerenciaMouse(int button, int state, int x, int y)
 {
     if ( button == GLUT_LEFT_BUTTON && state == GLUT_DOWN )
 	{
-		/* Pega a posição atua do mouse */
+		/* Pega a posiï¿½ï¿½o atua do mouse */
 		last_press_x = x;
 		last_press_y = y;
 	}
@@ -292,28 +295,32 @@ void GerenciaMouse(int button, int state, int x, int y)
 	glutPostRedisplay();
 }
 
-void GerenciaTEspeciais(int key, int x, int y)
-{
+void GerenciaTEspeciais(int key, int x, int y){
 
 if(key == GLUT_KEY_UP)
 	{
-	rox+=10; roy=0; roz=0;
-	ang+=10;
+	roy+=1; 
+	// roy=0; roz=0;
+	// ang+=10;
 	}
 if(key == GLUT_KEY_DOWN)
 	{
-	rox-=10; roy=0; roz=0;
-	ang-=10;
+	roy-=1;
+	// roy=0; roz=0;
+	// ang-=10;
 	}
 if(key == GLUT_KEY_LEFT)
 	{
-	rox=0; roy+=1; roz=0;
-	ang+=10; wire=0;
+	// rox=0; 
+	rox-=1;
+	//  roz=0;
+	// ang+=10; wire=0;
 	}
 if(key == GLUT_KEY_RIGHT)
 	{
-	rox=0; roy-=1; roz=0;
-	ang-=10; wire=1;
+	rox+=1;
+	//  roy-=1; roz=0;
+	// ang-=10; wire=1;
 	}
 
 Desenha;
@@ -387,12 +394,12 @@ glutPostRedisplay();
 glutTimerFunc(10,Timer, 5);
 }
 
-/* Callback chamada quando o mouse é movido com
+/* Callback chamada quando o mouse ï¿½ movido com
  * alguma tecla pressionada */
 void Mouse_Motion(int x, int y)
 {
-	/* Se o mouse é movido para a esquerda, rotationX é decrementado
-	 * caso contrário, aumentado. Mesma ideia para rotationY */
+	/* Se o mouse ï¿½ movido para a esquerda, rotationX ï¿½ decrementado
+	 * caso contrï¿½rio, aumentado. Mesma ideia para rotationY */
 	rotationX += (double)(x - last_press_x);
 	rotationY += (double)(y - last_press_y);
 
@@ -402,8 +409,9 @@ void Mouse_Motion(int x, int y)
 	glutPostRedisplay();
 }
 
-int main(void)
+int main(int argc, char** argv)
 {
+	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(600,600);
 	//glutInitWindowSize(400,350);
