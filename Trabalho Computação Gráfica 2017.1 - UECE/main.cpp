@@ -41,6 +41,8 @@ int year = 0, day = 0, wire = 0;
 
 double rotationX = 0.0;
 double rotationY = 0.0;
+double scaleXYZ = 1.0;
+double variacaoScale = 0.005;
 
 int last_press_x = 0;
 int last_press_y = 0;
@@ -238,6 +240,7 @@ void Desenha(void) {
 
     glMatrixMode(GL_MODELVIEW);
 
+    glScalef(scaleXYZ,scaleXYZ,scaleXYZ);
     glRotatef(20.0, 1.0, 0.0, 0.0); /* Rotaciona em torno do X */
     glRotatef(20.0, 0.0, 1.0, 0.0); /* Rotaciona em torno de Y */
 
@@ -505,6 +508,12 @@ void GerenciaTEspeciais(int key, int x, int y) {
 
 void Keyboard_Function(unsigned char key, int x, int y) {
     switch (key) {
+    case '+':
+        scaleXYZ += variacaoScale;
+        break;
+    case '-':
+        scaleXYZ -= variacaoScale;
+        break;
     }
     glutPostRedisplay();
 }
