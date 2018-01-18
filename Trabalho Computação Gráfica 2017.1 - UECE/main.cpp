@@ -1,4 +1,4 @@
-#include <windows.h>
+// #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <GL/glut.h>
@@ -180,15 +180,6 @@ void definirIluminacao(void) {
     GLfloat posicaoLuzCima[4]= {0.0, 3.0, 0.0, 1.0};
     GLfloat posicaoLuzBaixo[4]= {0.0, -3.0, 0.0, 1.0};
 
-    // Capacidade de brilho do material
-    GLfloat especularidade[4]= {1.0,1.0,1.0,1.0};
-    GLint especMaterial = 60;
-
-    // Define a refletancia do material
-    glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);
-    // Define a concentracao do brilho
-    glMateriali(GL_FRONT,GL_SHININESS,especMaterial);
-
     // Ativa o uso da luz ambiente
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
 
@@ -200,30 +191,42 @@ void definirIluminacao(void) {
 
     // Define os parametros da luz de numero 1 (Lado esquedro do sol)
     //glLightfv(GL_LIGHT1, GL_AMBIENT, luzAmbiente);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, luzDifusa );
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, luzEspecular );
     //glLightfv(GL_LIGHT1, GL_SPECULAR, luzEspecular );
     glLightfv(GL_LIGHT1, GL_POSITION, posicaoLuzEsquerda );
 
     // Define os parametros da luz de numero 2 (Lado direito do sol)
     glLightfv(GL_LIGHT2, GL_AMBIENT, luzAmbiente);
-    glLightfv(GL_LIGHT2, GL_DIFFUSE, luzDifusa );
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, luzEspecular );
     //glLightfv(GL_LIGHT2, GL_SPECULAR, luzEspecular );
     glLightfv(GL_LIGHT2, GL_POSITION, posicaoLuzDireita );
 
     // Define os parametros da luz de numero 3 (Em cima do sol)
     //glLightfv(GL_LIGHT3, GL_AMBIENT, luzAmbiente);
-    glLightfv(GL_LIGHT3, GL_DIFFUSE, luzDifusa );
+    glLightfv(GL_LIGHT3, GL_DIFFUSE, luzEspecular );
     //glLightfv(GL_LIGHT3, GL_SPECULAR, luzEspecular );
     glLightfv(GL_LIGHT3, GL_POSITION, posicaoLuzCima );
 
     // Define os parametros da luz de numero 4 (Abaixo do sol)
     glLightfv(GL_LIGHT4, GL_AMBIENT, luzAmbiente);
-    glLightfv(GL_LIGHT4, GL_DIFFUSE, luzDifusa );
+    glLightfv(GL_LIGHT4, GL_DIFFUSE, luzEspecular );
     //glLightfv(GL_LIGHT4, GL_SPECULAR, luzEspecular );
     glLightfv(GL_LIGHT4, GL_POSITION, posicaoLuzBaixo );
 }
 
 void Desenha(void) {
+
+	GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat mat_ambient[] = { 0.7, 0.7, 0.7, 1.0 };
+	GLfloat mat_ambient_color[] = { 0.8, 0.8, 0.2, 1.0 };
+	GLfloat mat_diffuse[] = { 0.1, 0.5, 0.8, 1.0 };
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat no_shininess[] = { 0.0 };
+	GLfloat low_shininess[] = { 5.0 };
+	GLfloat high_shininess[] = { 100.0 };
+	GLfloat mat_emission[] = {0.89, 0.79, 0.09}; // Cor amarela
+
+
     // Limpa a janela e o depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     definirIluminacao();
@@ -248,13 +251,27 @@ void Desenha(void) {
     Desenha_Origem();
     Desenha_Eixos_Coordenados();
 
-    // Sol
+	// Reflexão para o sol
+	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_emission);
+    
+	// Sol
     glPushMatrix();
     glRotatef ((GLfloat) day/10, 0.0, 1.0, 0.0);
     glColor3f (0.89, 0.79, 0.09);
     if (wire == 0) glutSolidSphere(2.0, 25, 25);
     else glutWireSphere(2.0, 25, 25);
     glPopMatrix();
+
+	// Reflexão de luz padrão dos materiais. Utilizado para os planetas
+	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
+	glMaterialfv(GL_FRONT, GL_SHININESS, no_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, no_mat);
 
     // Mercurio
     glPushMatrix();
@@ -438,10 +455,10 @@ void Inicializa (void) {
     glEnable(GL_COLOR_MATERIAL);// Habilita a definicao da cor do material a partir da cor corrente
     glEnable(GL_LIGHTING);//Habilita o uso de iluminacao
     glEnable(GL_LIGHT0);// Habilita a luz de numero 0
-    glEnable(GL_LIGHT1);// Habilita a luz de numero 1
-    glEnable(GL_LIGHT2);// Habilita a luz de numero 2
-    glEnable(GL_LIGHT3);// Habilita a luz de numero 3
-    glEnable(GL_LIGHT4);// Habilita a luz de numero 4
+    // glEnable(GL_LIGHT1);// Habilita a luz de numero 1
+    // glEnable(GL_LIGHT2);// Habilita a luz de numero 2
+    // glEnable(GL_LIGHT3);// Habilita a luz de numero 3
+    // glEnable(GL_LIGHT4);// Habilita a luz de numero 4
     glEnable(GL_DEPTH_TEST);// Habilita o depth-buffering
 
     angle = 25;
