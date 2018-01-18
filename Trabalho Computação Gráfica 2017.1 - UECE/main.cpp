@@ -1,4 +1,4 @@
-// #include <windows.h>
+//#include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <GL/glut.h>
@@ -9,6 +9,7 @@
 #define ALTURA   600
 #define QUANTIDADE_ESTRELAS 1000
 #define TAMANHO_UNIVERSO 20
+#define MULT_VELOCIDADE 2;
 
 #define pi 4*atan(1)
 
@@ -23,14 +24,14 @@ GLfloat xSaturno,zSaturno;
 GLfloat xUrano,zUrano;
 GLfloat xNetuno,zNetuno;
 
-float tetaMercurio = 0;
-float tetaVenus = 0;
-float tetaTerra = 0;
-float tetaMarte = 0;
-float tetaJupter = 0;
-float tetaSaturno = 0;
-float tetaUrano = 0;
-float tetaNetuno = 0;
+float tetaMercurio = 0, velocMercurio = 0.001;
+float tetaVenus = 0, velocVenus = 0.003;
+float tetaTerra = 0, velocTerra = 0.002;
+float tetaMarte = 0, velocMarte = 0.0025;
+float tetaJupter = 0, velocJupter = 0.0008;
+float tetaSaturno = 0, velocSaturno = 0.004;
+float tetaUrano = 0, velocUrano = 0.0015;
+float tetaNetuno = 0, velocNetuno = 0.0009;
 
 int starsX[QUANTIDADE_ESTRELAS], starsY[QUANTIDADE_ESTRELAS], starsZ[QUANTIDADE_ESTRELAS];
 int flagStars = 0;
@@ -43,6 +44,9 @@ double rotationX = 0.0;
 double rotationY = 0.0;
 double scaleXYZ = 1.0;
 double variacaoScale = 0.005;
+
+int ativarRotas = 1;
+int ativarEstrelas = 1;
 
 int last_press_x = 0;
 int last_press_y = 0;
@@ -170,7 +174,7 @@ void Desenha_Estrelas() {
     }
 }
 
-void definirIluminacao(void) {
+void Definir_Iluminacao(void) {
     GLfloat luzAmbiente[4]= {0.2,0.2,0.2,1.0};
     GLfloat luzDifusa[4]= {0.7,0.7,0.7,1.0};
     GLfloat luzEspecular[4]= {1.0, 1.0, 1.0, 1.0};
@@ -214,65 +218,17 @@ void definirIluminacao(void) {
     glLightfv(GL_LIGHT4, GL_POSITION, posicaoLuzBaixo );
 }
 
-void Desenha(void) {
-
-	GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
-	GLfloat mat_ambient[] = { 0.7, 0.7, 0.7, 1.0 };
-	GLfloat mat_ambient_color[] = { 0.8, 0.8, 0.2, 1.0 };
-	GLfloat mat_diffuse[] = { 0.1, 0.5, 0.8, 1.0 };
-	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat no_shininess[] = { 0.0 };
-	GLfloat low_shininess[] = { 5.0 };
-	GLfloat high_shininess[] = { 100.0 };
-	GLfloat mat_emission[] = {0.89, 0.79, 0.09}; // Cor amarela
-
-
-    // Limpa a janela e o depth buffer
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    definirIluminacao();
-
-    // Definindo cor do Universo
-    glColor3f(0.0f, 0.0f, 0.0f);
-
-    glMatrixMode(GL_PROJECTION);
-
-    /* Rotaciona os objetos para visualizar a 3 dimensao */
-    glRotatef(rotationY, 1.0, 0.0, 0.0); /* Rotaciona em torno do X */
-    glRotatef(rotationX, 0.0, 1.0, 0.0); /* Rotaciona em torno de Y */
-    glTranslatef(rox,roy,roz);
-
-    glMatrixMode(GL_MODELVIEW);
-
-    glScalef(scaleXYZ,scaleXYZ,scaleXYZ);
-    glRotatef(20.0, 1.0, 0.0, 0.0); /* Rotaciona em torno do X */
-    glRotatef(20.0, 0.0, 1.0, 0.0); /* Rotaciona em torno de Y */
-
-    Desenha_Estrelas();
-    Desenha_Origem();
-    Desenha_Eixos_Coordenados();
-
-	// Reflexão para o sol
-	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_emission);
-    
-	// Sol
+void Desenha_Sol(){
+    // Sol
     glPushMatrix();
     glRotatef ((GLfloat) day/10, 0.0, 1.0, 0.0);
     glColor3f (0.89, 0.79, 0.09);
     if (wire == 0) glutSolidSphere(2.0, 25, 25);
     else glutWireSphere(2.0, 25, 25);
     glPopMatrix();
+}
 
-	// Reflexão de luz padrão dos materiais. Utilizado para os planetas
-	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
-	glMaterialfv(GL_FRONT, GL_SHININESS, no_shininess);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, no_mat);
-
+void Desenha_Planetas(){
     // Mercurio
     glPushMatrix();
     glTranslatef (xMercurio, 0, zMercurio);
@@ -357,7 +313,9 @@ void Desenha(void) {
     if (wire == 0) glutSolidSphere(0.40, 25, 25);
     else glutWireSphere(0.40, 25, 25);
     glPopMatrix();
+}
 
+void Desenha_Rotas_Planetas(){
     double rotaMercurio = 0;
     glColor3f(1.0,1.0,1.0);
     for(;rotaMercurio <= 720; rotaMercurio+=0.1){
@@ -445,11 +403,71 @@ void Desenha(void) {
             glVertex3f(xNetuno+0.02,0.0,zNetuno+0.02);
         glEnd();
     }
+}
+
+void Desenha(void) {
+
+	GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat mat_ambient[] = { 0.7, 0.7, 0.7, 1.0 };
+	GLfloat mat_ambient_color[] = { 0.8, 0.8, 0.2, 1.0 };
+	GLfloat mat_diffuse[] = { 0.1, 0.5, 0.8, 1.0 };
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat no_shininess[] = { 0.0 };
+	GLfloat low_shininess[] = { 5.0 };
+	GLfloat high_shininess[] = { 100.0 };
+	GLfloat mat_emission[] = {0.89, 0.79, 0.09}; // Cor amarela
+
+    // Limpa a janela e o depth buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Definir_Iluminacao();
+
+    // Definindo cor do Universo
+    glColor3f(0.0f, 0.0f, 0.0f);
+
+    glMatrixMode(GL_PROJECTION);
+
+    /* Rotaciona os objetos para visualizar a 3 dimensao */
+    glRotatef(rotationY, 1.0, 0.0, 0.0); /* Rotaciona em torno do X */
+    glRotatef(rotationX, 0.0, 1.0, 0.0); /* Rotaciona em torno de Y */
+    glTranslatef(rox,roy,roz);
+
+    glMatrixMode(GL_MODELVIEW);
+
+    glScalef(scaleXYZ,scaleXYZ,scaleXYZ);
+    glRotatef(20.0, 1.0, 0.0, 0.0); /* Rotaciona em torno do X */
+    glRotatef(20.0, 0.0, 1.0, 0.0); /* Rotaciona em torno de Y */
+
+    if(ativarEstrelas == 1)
+        Desenha_Estrelas();
+
+    Desenha_Origem();
+    Desenha_Eixos_Coordenados();
+
+	// Reflexão para o sol
+	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_emission);
+
+	Desenha_Sol();
+
+	// Reflexão de luz padrão dos materiais. Utilizado para os planetas
+	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
+	glMaterialfv(GL_FRONT, GL_SHININESS, no_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, no_mat);
+
+    Desenha_Planetas();
+
+    if(ativarRotas == 1)
+        Desenha_Rotas_Planetas();
 
     glutSwapBuffers();
 }
 
-void Inicializa (void) {
+void Inicializa(void) {
     // Código da iluminação vinha aqui.
 
     glEnable(GL_COLOR_MATERIAL);// Habilita a definicao da cor do material a partir da cor corrente
@@ -494,14 +512,9 @@ void GerenciaMouse(int button, int state, int x, int y) {
         /* Pega a posicao atual do mouse */
         last_press_x = x;
         last_press_y = y;
+        EspecificaParametrosVisualizacao();
+        glutPostRedisplay();
     }
-    if ( button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN ) {
-        /* Pega a posicao atual do mouse */
-        last_press_x = x;
-        last_press_y = y;
-    }
-    EspecificaParametrosVisualizacao();
-    glutPostRedisplay();
 }
 
 void GerenciaTEspeciais(int key, int x, int y) {
@@ -560,14 +573,14 @@ void Timer(int value) {
     xNetuno = 19*cos(tetaNetuno);
     zNetuno = 17*sin(tetaNetuno);
 
-    tetaMercurio += 0.001;
-    tetaVenus += 0.003;
-    tetaTerra += 0.002;
-    tetaMarte += 0.0025;
-    tetaJupter += 0.0008;
-    tetaSaturno += 0.004;
-    tetaUrano += 0.0015;
-    tetaNetuno += 0.0009;
+    tetaMercurio += velocMercurio;
+    tetaVenus += velocVenus;
+    tetaTerra += velocTerra;
+    tetaMarte += velocMarte;
+    tetaJupter += velocJupter;
+    tetaSaturno += velocSaturno;
+    tetaUrano += velocUrano;
+    tetaNetuno += velocNetuno;
 
     spinDisplay();
     EspecificaParametrosVisualizacao();
@@ -576,11 +589,9 @@ void Timer(int value) {
     glutTimerFunc(10,Timer, 5);
 }
 
-/* Callback chamada quando o mouse � movido com
- * alguma tecla pressionada */
 void Mouse_Motion(int x, int y) {
     /* Se o mouse e movido para a esquerda, rotationX e decrementado
-     * caso contrario, aumentado. Mesma ideia para rotationY */
+    * caso contrario, aumentado. Mesma ideia para rotationY */
     rotationX += (double)(x - last_press_x);
     rotationY += (double)(y - last_press_y);
 
@@ -588,6 +599,55 @@ void Mouse_Motion(int x, int y) {
     last_press_y = y;
 
     glutPostRedisplay;
+}
+
+void Janela(int opcao) {
+	switch(opcao){
+		case 0:
+            ativarRotas = 1 - ativarRotas;
+			break;
+		case 1:
+		    ativarEstrelas = 1 - ativarEstrelas;
+			break;
+        case 2:
+            velocMercurio*=MULT_VELOCIDADE;
+            velocVenus*=MULT_VELOCIDADE;
+            velocTerra*=MULT_VELOCIDADE;
+            velocMarte*=MULT_VELOCIDADE;
+            velocJupter*=MULT_VELOCIDADE;
+            velocSaturno*=MULT_VELOCIDADE;
+            velocUrano*=MULT_VELOCIDADE;
+            velocNetuno*=MULT_VELOCIDADE;
+			break;
+        case 3:
+            velocMercurio/=MULT_VELOCIDADE;
+            velocVenus/=MULT_VELOCIDADE;
+            velocTerra/=MULT_VELOCIDADE;
+            velocMarte/=MULT_VELOCIDADE;
+            velocJupter/=MULT_VELOCIDADE;
+            velocSaturno/=MULT_VELOCIDADE;
+            velocUrano/=MULT_VELOCIDADE;
+            velocNetuno/=MULT_VELOCIDADE;
+			break;
+        case 4:
+            break;
+	}
+	glutPostRedisplay();
+}
+
+void Criar_Menu() {
+	/* Cria um menu cujas as opções serão gerenciadas pela funcao "Janela" */
+	glutCreateMenu(Janela);
+
+	/* Cria entradas nesse menu */
+	glutAddMenuEntry("Ativar/Desativar rotas", 0);
+	glutAddMenuEntry("Ativar/Desativar estrelas", 1);
+	glutAddMenuEntry("Aumentar velocidade", 2);
+	glutAddMenuEntry("Diminuir velocidade", 3);
+	glutAddMenuEntry("Cancelar", 4);
+
+	/* Indica qual o botao que acionará o menu */
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 int main(int argc, char** argv) {
@@ -603,5 +663,6 @@ int main(int argc, char** argv) {
     glutKeyboardFunc(Keyboard_Function);
     glutTimerFunc(500, Timer, 1);
     Inicializa();
+    Criar_Menu();
     glutMainLoop();
 }

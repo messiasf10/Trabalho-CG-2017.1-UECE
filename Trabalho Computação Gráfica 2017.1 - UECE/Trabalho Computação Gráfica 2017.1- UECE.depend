@@ -234,3 +234,15 @@
 1341013974 c:\program files (x86)\codeblocks\mingw\include\math.h
 	<_mingw.h>
 
+1516298033 source:c:\users\messias\documents\github\trabalho-cg-2017.1-uece\trabalho computação gráfica 2017.1 - uece\main.cpp
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<GL/glut.h>
+	<math.h>
+	<time.h>
+
+1341013976 c:\program files (x86)\codeblocks\mingw\include\time.h
+	<_mingw.h>
+	<stddef.h>
+
