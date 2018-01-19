@@ -23,6 +23,7 @@ GLfloat xJupter,zJupter;
 GLfloat xSaturno,zSaturno;
 GLfloat xUrano,zUrano;
 GLfloat xNetuno,zNetuno;
+GLfloat xLua,zLua;
 
 float tetaMercurio = 0, velocMercurio = 0.001;
 float tetaVenus = 0, velocVenus = 0.003;
@@ -32,6 +33,7 @@ float tetaJupter = 0, velocJupter = 0.0008;
 float tetaSaturno = 0, velocSaturno = 0.004;
 float tetaUrano = 0, velocUrano = 0.0015;
 float tetaNetuno = 0, velocNetuno = 0.0009;
+float tetaLua = 0, velocLua = 0.05;
 
 int starsX[QUANTIDADE_ESTRELAS], starsY[QUANTIDADE_ESTRELAS], starsZ[QUANTIDADE_ESTRELAS];
 int flagStars = 0;
@@ -254,6 +256,16 @@ void Desenha_Planetas(){
     glColor3f (0.0, 1.0, 0.0);
     if (wire == 0) glutSolidSphere(0.3, 25, 25);
     else glutWireSphere(0.3, 25, 25);
+    glPopMatrix();
+
+    // Lua da Terra
+    glPushMatrix();
+    glTranslatef (xTerra, 0, zTerra);
+    glTranslatef(xLua, 0, zLua);
+    glRotatef ((GLfloat) day, 0.0, 1.0, 0.0);
+    glColor3f (0.8, 0.8, 0.8);
+    if (wire == 0) glutSolidSphere(0.05, 25, 25);
+    else glutWireSphere(0.05, 25, 25);
     glPopMatrix();
 
     // Marte
@@ -573,6 +585,9 @@ void Timer(int value) {
     xNetuno = 19*cos(tetaNetuno);
     zNetuno = 17*sin(tetaNetuno);
 
+    xLua = 0.5*cos(tetaLua);
+    zLua = 0.5*sin(tetaLua);
+
     tetaMercurio += velocMercurio;
     tetaVenus += velocVenus;
     tetaTerra += velocTerra;
@@ -581,6 +596,7 @@ void Timer(int value) {
     tetaSaturno += velocSaturno;
     tetaUrano += velocUrano;
     tetaNetuno += velocNetuno;
+    tetaLua += velocLua;
 
     spinDisplay();
     EspecificaParametrosVisualizacao();
@@ -618,6 +634,7 @@ void Janela(int opcao) {
             velocSaturno*=MULT_VELOCIDADE;
             velocUrano*=MULT_VELOCIDADE;
             velocNetuno*=MULT_VELOCIDADE;
+            velocLua*=MULT_VELOCIDADE;
 			break;
         case 3:
             velocMercurio/=MULT_VELOCIDADE;
@@ -628,6 +645,7 @@ void Janela(int opcao) {
             velocSaturno/=MULT_VELOCIDADE;
             velocUrano/=MULT_VELOCIDADE;
             velocNetuno/=MULT_VELOCIDADE;
+            velocLua/=MULT_VELOCIDADE;
 			break;
         case 4:
             break;
