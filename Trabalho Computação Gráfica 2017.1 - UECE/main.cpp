@@ -543,6 +543,12 @@ void GerenciaTEspeciais(int key, int x, int y) {
     case GLUT_KEY_RIGHT:
         rox+=1;
         break;
+    case GLUT_KEY_PAGE_UP:
+        roz+=1;
+        break;
+    case GLUT_KEY_PAGE_DOWN:
+        roz-=1;
+        break;
     }
     Desenha;
     glutPostRedisplay;
