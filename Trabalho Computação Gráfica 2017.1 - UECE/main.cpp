@@ -614,13 +614,33 @@ void Timer(int value) {
 void Mouse_Motion(int x, int y) {
     /* Se o mouse e movido para a esquerda, rotationX e decrementado
     * caso contrario, aumentado. Mesma ideia para rotationY */
-    rotationX += (double)(x - last_press_x);
-    rotationY += (double)(y - last_press_y);
+    rotationX += -(double)(x - last_press_x)*0.1;
+    rotationY += -(double)(y - last_press_y)*0.1;
 
     last_press_x = x;
     last_press_y = y;
 
-    glutPostRedisplay;
+    glutPostRedisplay();
+}
+
+void resetar(void){
+    // reseta a velocidade
+    velocMercurio = 0.001;
+    velocVenus = 0.003;
+    velocTerra = 0.002;
+    velocMarte = 0.0025;
+    velocJupter = 0.0008;
+    velocSaturno = 0.004;
+    velocUrano = 0.0015;
+    velocNetuno = 0.0009;
+    velocLua = 0.05;
+
+    // reseta a camera
+    rotationY = 0;
+    rotationX = 0;
+    rox = -0;
+    roy = -0;
+    roz = -0;
 }
 
 void Janela(int opcao) {
@@ -654,6 +674,8 @@ void Janela(int opcao) {
             velocLua/=MULT_VELOCIDADE;
 			break;
         case 4:
+            resetar();
+        case 5:
             break;
 	}
 	glutPostRedisplay();
@@ -668,7 +690,8 @@ void Criar_Menu() {
 	glutAddMenuEntry("Ativar/Desativar estrelas", 1);
 	glutAddMenuEntry("Aumentar velocidade", 2);
 	glutAddMenuEntry("Diminuir velocidade", 3);
-	glutAddMenuEntry("Cancelar", 4);
+    glutAddMenuEntry("Resetar", 4);
+	glutAddMenuEntry("Cancelar", 5);
 
 	/* Indica qual o botao que acionará o menu */
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
