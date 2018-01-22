@@ -40,7 +40,7 @@ int flagStars = 0;
 
 GLint rox = 0, roy = 0 , roz = 0, ang;
 
-int day = 0, wire = 0;
+int day = 0;
 
 double rotationX = 0.0;
 double rotationY = 0.0;
@@ -49,6 +49,7 @@ double variacaoScale = 0.005;
 
 int ativarRotas = 1;
 int ativarEstrelas = 1;
+int ativarSolidos = 1;
 
 int last_press_x = 0;
 int last_press_y = 0;
@@ -197,7 +198,7 @@ void Desenha_Sol(){
     glPushMatrix();
     glRotatef ((GLfloat) day/10, 0.0, 1.0, 0.0);
     glColor3f (0.89, 0.79, 0.09);
-    if (wire == 0) glutSolidSphere(2.0, 25, 25);
+    if (ativarSolidos == 1) glutSolidSphere(2.0, 25, 25);
     else glutWireSphere(2.0, 25, 25);
     glPopMatrix();
 }
@@ -208,7 +209,7 @@ void Desenha_Planetas(){
     glTranslatef (xMercurio, 0, zMercurio);
     glRotatef ((GLfloat) day/5, 0.0, 1.0, 0.0);
     glColor3f (0.41, 0.41, 0.41);
-    if (wire == 0) glutSolidSphere(0.2, 25, 25);
+    if (ativarSolidos == 1) glutSolidSphere(0.2, 25, 25);
     else glutWireSphere(0.2, 25, 25);
     glPopMatrix();
 
@@ -217,7 +218,7 @@ void Desenha_Planetas(){
     glTranslatef (xVenus, 0, zVenus);
     glRotatef ((GLfloat) day/3, 0.0, 1.0, 0.0);
     glColor3f (1.0, 0.27, 0.0);
-    if (wire == 0) glutSolidSphere(0.4, 25, 25);
+    if (ativarSolidos == 1) glutSolidSphere(0.4, 25, 25);
     else glutWireSphere(0.4, 25, 25);
     glPopMatrix();
 
@@ -226,7 +227,7 @@ void Desenha_Planetas(){
     glTranslatef (xTerra, 0, zTerra);
     glRotatef ((GLfloat) day, 0.0, 1.0, 0.0);
     glColor3f (0.1, 0.1, 1.0);
-    if (wire == 0) glutSolidSphere(0.3, 25, 25);
+    if (ativarSolidos == 1) glutSolidSphere(0.3, 25, 25);
     else glutWireSphere(0.3, 25, 25);
     glPopMatrix();
 
@@ -236,7 +237,7 @@ void Desenha_Planetas(){
     glTranslatef(xLua, 0, zLua);
     glRotatef ((GLfloat) day, 0.0, 1.0, 0.0);
     glColor3f (0.8, 0.8, 0.8);
-    if (wire == 0) glutSolidSphere(0.05, 25, 25);
+    if (ativarSolidos == 1) glutSolidSphere(0.05, 25, 25);
     else glutWireSphere(0.05, 25, 25);
     glPopMatrix();
 
@@ -245,7 +246,7 @@ void Desenha_Planetas(){
     glTranslatef (xMarte, 0, zMarte);
     glRotatef ((GLfloat) day/10, 0.0, 1.0, 0.0);
     glColor3f (1.0, 0.0, 0.0);
-    if (wire == 0) glutSolidSphere(0.2, 25, 25);
+    if (ativarSolidos == 1) glutSolidSphere(0.2, 25, 25);
     else glutWireSphere(0.2, 25, 25);
     glPopMatrix();
 
@@ -254,7 +255,7 @@ void Desenha_Planetas(){
     glTranslatef (xJupter, 0, zJupter);
     glRotatef ((GLfloat) day/10, 0.0, 1.0, 0.0);
     glColor3f (0.41, 0.41, 0.41);
-    if (wire == 0) glutSolidSphere(0.8, 25, 25);
+    if (ativarSolidos == 1) glutSolidSphere(0.8, 25, 25);
     else glutWireSphere(0.8, 25, 25);
     glPopMatrix();
 
@@ -263,7 +264,7 @@ void Desenha_Planetas(){
     glTranslatef (xSaturno, 0, zSaturno);
     glRotatef ((GLfloat) day/10, 0.0, 1.0, 0.0);
     glColor3f (0.54, 0.27, 0.07);
-    if (wire == 0) glutSolidSphere(0.45, 25, 25);
+    if (ativarSolidos == 1) glutSolidSphere(0.45, 25, 25);
     else glutWireSphere(0.45, 25, 25);
     glPopMatrix();
 
@@ -285,7 +286,7 @@ void Desenha_Planetas(){
     glTranslatef (xUrano, 0, zUrano);
     glRotatef ((GLfloat) day/2, 0.0, 1.0, 0.0);
     glColor3f (0.67, 0.84, 0.90);
-    if (wire == 0) glutSolidSphere(0.45, 25, 25);
+    if (ativarSolidos == 1) glutSolidSphere(0.45, 25, 25);
     else glutWireSphere(0.45, 25, 25);
     glPopMatrix();
 
@@ -294,7 +295,7 @@ void Desenha_Planetas(){
     glTranslatef (xNetuno, 0, zNetuno);
     glRotatef ((GLfloat) day, 0.0, 1.0, 0.0);
     glColor3f (0.0, 0.74, 1.0);
-    if (wire == 0) glutSolidSphere(0.40, 25, 25);
+    if (ativarSolidos == 1) glutSolidSphere(0.40, 25, 25);
     else glutWireSphere(0.40, 25, 25);
     glPopMatrix();
 }
@@ -586,7 +587,7 @@ void Mouse_Motion(int x, int y) {
     last_press_x = x;
     last_press_y = y;
 
-    glutPostRedisplay();
+    glutPostRedisplay;
 }
 
 void resetar(void){
@@ -607,6 +608,11 @@ void resetar(void){
     rox = -0;
     roy = -0;
     roz = -0;
+
+    // reseta rotas, estrelas e solidos
+    ativarRotas = 1;
+    ativarEstrelas = 1;
+    ativarSolidos = 1;
 }
 
 void Janela(int opcao) {
@@ -640,8 +646,12 @@ void Janela(int opcao) {
             velocLua/=MULT_VELOCIDADE;
 			break;
         case 4:
-            resetar();
+            ativarSolidos = 1 - ativarSolidos;
+            break;
         case 5:
+            resetar();
+            break;
+        case 6:
             break;
 	}
 	glutPostRedisplay();
@@ -656,8 +666,9 @@ void Criar_Menu() {
 	glutAddMenuEntry("Ativar/Desativar estrelas", 1);
 	glutAddMenuEntry("Aumentar velocidade", 2);
 	glutAddMenuEntry("Diminuir velocidade", 3);
-    glutAddMenuEntry("Resetar", 4);
-	glutAddMenuEntry("Cancelar", 5);
+	glutAddMenuEntry("Solido/Linhas", 4);
+    glutAddMenuEntry("Resetar", 5);
+	glutAddMenuEntry("Cancelar", 6);
 
 	/* Indica qual o botao que acionará o menu */
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
