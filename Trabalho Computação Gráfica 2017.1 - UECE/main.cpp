@@ -40,7 +40,7 @@ int flagStars = 0;
 
 GLint rox = 0, roy = 0 , roz = 0, ang;
 
-int year = 0, day = 0, wire = 0;
+int day = 0, wire = 0;
 
 double rotationX = 0.0;
 double rotationY = 0.0;
@@ -181,10 +181,6 @@ void Definir_Iluminacao(void) {
     GLfloat luzDifusa[4]= {0.7,0.7,0.7,1.0};
     GLfloat luzEspecular[4]= {1.0, 1.0, 1.0, 1.0};
     GLfloat posicaoLuz[4]= {0.0, 0.0, 0.0, 1.0};
-    GLfloat posicaoLuzEsquerda[4]= {3.0, 0.0, 0.0, 1.0};
-    GLfloat posicaoLuzDireita[4]= {-3.0, 0.0, 0.0, 1.0};
-    GLfloat posicaoLuzCima[4]= {0.0, 3.0, 0.0, 1.0};
-    GLfloat posicaoLuzBaixo[4]= {0.0, -3.0, 0.0, 1.0};
 
     // Ativa o uso da luz ambiente
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
@@ -194,30 +190,6 @@ void Definir_Iluminacao(void) {
     glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa );
     glLightfv(GL_LIGHT0, GL_SPECULAR, luzEspecular );
     glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
-
-    // Define os parametros da luz de numero 1 (Lado esquedro do sol)
-    //glLightfv(GL_LIGHT1, GL_AMBIENT, luzAmbiente);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, luzEspecular );
-    //glLightfv(GL_LIGHT1, GL_SPECULAR, luzEspecular );
-    glLightfv(GL_LIGHT1, GL_POSITION, posicaoLuzEsquerda );
-
-    // Define os parametros da luz de numero 2 (Lado direito do sol)
-    glLightfv(GL_LIGHT2, GL_AMBIENT, luzAmbiente);
-    glLightfv(GL_LIGHT2, GL_DIFFUSE, luzEspecular );
-    //glLightfv(GL_LIGHT2, GL_SPECULAR, luzEspecular );
-    glLightfv(GL_LIGHT2, GL_POSITION, posicaoLuzDireita );
-
-    // Define os parametros da luz de numero 3 (Em cima do sol)
-    //glLightfv(GL_LIGHT3, GL_AMBIENT, luzAmbiente);
-    glLightfv(GL_LIGHT3, GL_DIFFUSE, luzEspecular );
-    //glLightfv(GL_LIGHT3, GL_SPECULAR, luzEspecular );
-    glLightfv(GL_LIGHT3, GL_POSITION, posicaoLuzCima );
-
-    // Define os parametros da luz de numero 4 (Abaixo do sol)
-    glLightfv(GL_LIGHT4, GL_AMBIENT, luzAmbiente);
-    glLightfv(GL_LIGHT4, GL_DIFFUSE, luzEspecular );
-    //glLightfv(GL_LIGHT4, GL_SPECULAR, luzEspecular );
-    glLightfv(GL_LIGHT4, GL_POSITION, posicaoLuzBaixo );
 }
 
 void Desenha_Sol(){
@@ -253,7 +225,7 @@ void Desenha_Planetas(){
     glPushMatrix();
     glTranslatef (xTerra, 0, zTerra);
     glRotatef ((GLfloat) day, 0.0, 1.0, 0.0);
-    glColor3f (0.0, 1.0, 0.0);
+    glColor3f (0.1, 0.1, 1.0);
     if (wire == 0) glutSolidSphere(0.3, 25, 25);
     else glutWireSphere(0.3, 25, 25);
     glPopMatrix();
@@ -480,18 +452,13 @@ void Desenha(void) {
 }
 
 void Inicializa(void) {
-    // Código da iluminação vinha aqui.
-
-    glEnable(GL_COLOR_MATERIAL);// Habilita a definicao da cor do material a partir da cor corrente
+    // Habilita a definicao da cor do material a partir da cor corrente
+    glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);//Habilita o uso de iluminacao
     glEnable(GL_LIGHT0);// Habilita a luz de numero 0
-    // glEnable(GL_LIGHT1);// Habilita a luz de numero 1
-    // glEnable(GL_LIGHT2);// Habilita a luz de numero 2
-    // glEnable(GL_LIGHT3);// Habilita a luz de numero 3
-    // glEnable(GL_LIGHT4);// Habilita a luz de numero 4
     glEnable(GL_DEPTH_TEST);// Habilita o depth-buffering
 
-    angle = 25;
+    angle = 25; // Utilizado na câmera de perspectiva
 }
 
 // Funcao usada para especificar o volume de visualizacao
@@ -514,7 +481,6 @@ void AlteraTamanhoJanela(GLsizei w, GLsizei h) {
 }
 
 void spinDisplay(void) {
-    year = (year + 1);
     day  = (day + 2 );
     glutPostRedisplay();
 }
@@ -708,7 +674,7 @@ int main(int argc, char** argv) {
     glutMotionFunc(Mouse_Motion);
     glutSpecialFunc(GerenciaTEspeciais);
     glutKeyboardFunc(Keyboard_Function);
-    glutTimerFunc(500, Timer, 1);
+    glutTimerFunc(10, Timer, 1);
     Inicializa();
     Criar_Menu();
     glutMainLoop();
