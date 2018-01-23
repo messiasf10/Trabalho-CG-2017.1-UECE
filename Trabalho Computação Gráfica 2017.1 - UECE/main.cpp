@@ -11,7 +11,7 @@
 #define TAMANHO_UNIVERSO 20
 #define MULT_VELOCIDADE 2;
 
-#define pi 4*atan(1)
+void EscreverTextoStroke(void *font, char *string);
 
 GLfloat angle,fAspect,x,z,c=1;
 
@@ -50,6 +50,7 @@ double variacaoScale = 0.005;
 int ativarRotas = 1;
 int ativarEstrelas = 1;
 int ativarSolidos = 1;
+int ativarNomes = 1;
 
 int last_press_x = 0;
 int last_press_y = 0;
@@ -201,6 +202,15 @@ void Desenha_Sol(){
     if (ativarSolidos == 1) glutSolidSphere(2.0, 25, 25);
     else glutWireSphere(2.0, 25, 25);
     glPopMatrix();
+
+    // Escrevendo nome do Sol
+    glPushMatrix();
+	glTranslatef(0,2.5,0);
+	glColor3f (0.89, 0.79, 0.09);
+	glScalef(0.002, 0.002, 0.002); // diminui o tamanho do fonte
+	glLineWidth(2); // define a espessura da linha
+	if(ativarNomes == 1) EscreverTextoStroke(GLUT_STROKE_ROMAN, "Sol");
+	glPopMatrix();
 }
 
 void Desenha_Planetas(){
@@ -213,6 +223,15 @@ void Desenha_Planetas(){
     else glutWireSphere(0.2, 25, 25);
     glPopMatrix();
 
+    // Escreve nome de Mercurio
+    glPushMatrix();
+    glTranslatef (xMercurio, 0.5, zMercurio);
+    glColor3f (1.0, 1.0, 1.0);
+    glScalef(0.002, 0.002, 0.002); // diminui o tamanho da fonte
+	glLineWidth(2); // define a espessura da linha
+	if(ativarNomes == 1) EscreverTextoStroke(GLUT_STROKE_ROMAN, "Mercurio");
+    glPopMatrix();
+
     // Venus
     glPushMatrix();
     glTranslatef (xVenus, 0, zVenus);
@@ -220,6 +239,15 @@ void Desenha_Planetas(){
     glColor3f (1.0, 0.27, 0.0);
     if (ativarSolidos == 1) glutSolidSphere(0.4, 25, 25);
     else glutWireSphere(0.4, 25, 25);
+    glPopMatrix();
+
+    // Escreve nome de Venus
+    glPushMatrix();
+    glTranslatef (xVenus, 0.7, zVenus);
+    glColor3f (1.0, 1.0, 1.0);
+    glScalef(0.002, 0.002, 0.002); // diminui o tamanho da fonte
+	glLineWidth(2); // define a espessura da linha
+	if(ativarNomes == 1) EscreverTextoStroke(GLUT_STROKE_ROMAN, "Venus");
     glPopMatrix();
 
     // Terra
@@ -241,6 +269,15 @@ void Desenha_Planetas(){
     else glutWireSphere(0.05, 25, 25);
     glPopMatrix();
 
+    // Escreve nome da Terra
+    glPushMatrix();
+    glTranslatef (xTerra, 0.6, zTerra);
+    glColor3f (1.0, 1.0, 1.0);
+    glScalef(0.002, 0.002, 0.002); // diminui o tamanho da fonte
+	glLineWidth(2); // define a espessura da linha
+	if(ativarNomes == 1) EscreverTextoStroke(GLUT_STROKE_ROMAN, "Terra");
+    glPopMatrix();
+
     // Marte
     glPushMatrix();
     glTranslatef (xMarte, 0, zMarte);
@@ -248,6 +285,15 @@ void Desenha_Planetas(){
     glColor3f (1.0, 0.0, 0.0);
     if (ativarSolidos == 1) glutSolidSphere(0.2, 25, 25);
     else glutWireSphere(0.2, 25, 25);
+    glPopMatrix();
+
+    // Escreve nome de Marte
+    glPushMatrix();
+    glTranslatef (xMarte, 0.5, zMarte);
+    glColor3f (1.0, 1.0, 1.0);
+    glScalef(0.002, 0.002, 0.002); // diminui o tamanho da fonte
+	glLineWidth(2); // define a espessura da linha
+	if(ativarNomes == 1) EscreverTextoStroke(GLUT_STROKE_ROMAN, "Marte");
     glPopMatrix();
 
     // Jupter
@@ -259,6 +305,15 @@ void Desenha_Planetas(){
     else glutWireSphere(0.8, 25, 25);
     glPopMatrix();
 
+    // Escreve nome de Jupter
+    glPushMatrix();
+    glTranslatef (xJupter, 1.2, zJupter);
+    glColor3f (1.0, 1.0, 1.0);
+    glScalef(0.002, 0.002, 0.002); // diminui o tamanho da fonte
+	glLineWidth(2); // define a espessura da linha
+	if(ativarNomes == 1) EscreverTextoStroke(GLUT_STROKE_ROMAN, "Jupter");
+    glPopMatrix();
+
     // Saturno
     glPushMatrix();
     glTranslatef (xSaturno, 0, zSaturno);
@@ -268,9 +323,20 @@ void Desenha_Planetas(){
     else glutWireSphere(0.45, 25, 25);
     glPopMatrix();
 
+    // Escreve nome de Saturno
+    glPushMatrix();
+    glTranslatef (xSaturno, 0.8, zSaturno);
+    glColor3f (1.0, 1.0, 1.0);
+    glScalef(0.002, 0.002, 0.002); // diminui o tamanho da fonte
+	glLineWidth(2); // define a espessura da linha
+	if(ativarNomes == 1) EscreverTextoStroke(GLUT_STROKE_ROMAN, "Saturno");
+    glPopMatrix();
+
+    // Desenha aneis de Saturno
     double aneisSaturno = 0;
     glPushMatrix();
     glTranslatef (xSaturno-0.1, 0, zSaturno-0.1);
+    glColor3f (0.54, 0.27, 0.07);
     glBegin(GL_LINE_STRIP);
         for(; aneisSaturno <= 360; aneisSaturno++){
             xSaturno = 0.7*cos(aneisSaturno);
@@ -290,6 +356,15 @@ void Desenha_Planetas(){
     else glutWireSphere(0.45, 25, 25);
     glPopMatrix();
 
+    // Escreve nome de Urano
+    glPushMatrix();
+    glTranslatef (xUrano, 0.8, zUrano);
+    glColor3f (1.0, 1.0, 1.0);
+    glScalef(0.002, 0.002, 0.002); // diminui o tamanho da fonte
+	glLineWidth(2); // define a espessura da linha
+	if(ativarNomes == 1) EscreverTextoStroke(GLUT_STROKE_ROMAN, "Urano");
+    glPopMatrix();
+
     // Netuno
     glPushMatrix();
     glTranslatef (xNetuno, 0, zNetuno);
@@ -297,6 +372,15 @@ void Desenha_Planetas(){
     glColor3f (0.0, 0.74, 1.0);
     if (ativarSolidos == 1) glutSolidSphere(0.40, 25, 25);
     else glutWireSphere(0.40, 25, 25);
+    glPopMatrix();
+
+    // Escreve nome de Netuno
+    glPushMatrix();
+    glTranslatef (xNetuno, 0.8, zNetuno);
+    glColor3f (1.0, 1.0, 1.0);
+    glScalef(0.002, 0.002, 0.002); // diminui o tamanho da fonte
+	glLineWidth(2); // define a espessura da linha
+	if(ativarNomes == 1) EscreverTextoStroke(GLUT_STROKE_ROMAN, "Netuno");
     glPopMatrix();
 }
 
@@ -425,8 +509,8 @@ void Desenha(void) {
     if(ativarEstrelas == 1)
         Desenha_Estrelas();
 
-    Desenha_Origem();
-    Desenha_Eixos_Coordenados();
+    // Desenha_Origem();
+    // Desenha_Eixos_Coordenados();
 
 	// Reflexão para o sol
 	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
@@ -613,6 +697,10 @@ void resetar(void){
     ativarRotas = 1;
     ativarEstrelas = 1;
     ativarSolidos = 1;
+    ativarNomes = 1;
+
+    // reseta escala
+    scaleXYZ = 1;
 }
 
 void Janela(int opcao) {
@@ -624,6 +712,12 @@ void Janela(int opcao) {
 		    ativarEstrelas = 1 - ativarEstrelas;
 			break;
         case 2:
+            ativarNomes = 1 - ativarNomes;
+            break;
+        case 3:
+            ativarSolidos = 1 - ativarSolidos;
+            break;
+        case 4:
             velocMercurio*=MULT_VELOCIDADE;
             velocVenus*=MULT_VELOCIDADE;
             velocTerra*=MULT_VELOCIDADE;
@@ -634,7 +728,7 @@ void Janela(int opcao) {
             velocNetuno*=MULT_VELOCIDADE;
             velocLua*=MULT_VELOCIDADE;
 			break;
-        case 3:
+        case 5:
             velocMercurio/=MULT_VELOCIDADE;
             velocVenus/=MULT_VELOCIDADE;
             velocTerra/=MULT_VELOCIDADE;
@@ -645,13 +739,10 @@ void Janela(int opcao) {
             velocNetuno/=MULT_VELOCIDADE;
             velocLua/=MULT_VELOCIDADE;
 			break;
-        case 4:
-            ativarSolidos = 1 - ativarSolidos;
-            break;
-        case 5:
+        case 6:
             resetar();
             break;
-        case 6:
+        case 7:
             break;
 	}
 	glutPostRedisplay();
@@ -664,14 +755,23 @@ void Criar_Menu() {
 	/* Cria entradas nesse menu */
 	glutAddMenuEntry("Ativar/Desativar rotas", 0);
 	glutAddMenuEntry("Ativar/Desativar estrelas", 1);
-	glutAddMenuEntry("Aumentar velocidade", 2);
-	glutAddMenuEntry("Diminuir velocidade", 3);
-	glutAddMenuEntry("Solido/Linhas", 4);
-    glutAddMenuEntry("Resetar", 5);
-	glutAddMenuEntry("Cancelar", 6);
+	glutAddMenuEntry("Ativar/Desativar nomes", 2);
+	glutAddMenuEntry("Solido/Linhas", 3);
+	glutAddMenuEntry("Aumentar velocidade", 4);
+	glutAddMenuEntry("Diminuir velocidade", 5);
+    glutAddMenuEntry("Resetar", 6);
+	glutAddMenuEntry("Cancelar", 7);
 
 	/* Indica qual o botao que acionará o menu */
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
+// Função que recebe a fonte e um texto por parâmetro para ser exibido na
+// tela usando fonte de linhas
+void EscreverTextoStroke(void *font, char *string) {
+	// Exibe caractere a caractere
+	while(*string)
+		glutStrokeCharacter(GLUT_STROKE_ROMAN,*string++);
 }
 
 int main(int argc, char** argv) {
