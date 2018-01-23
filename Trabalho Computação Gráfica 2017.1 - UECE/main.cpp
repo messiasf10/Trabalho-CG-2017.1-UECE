@@ -25,14 +25,14 @@ GLfloat xUrano,zUrano;
 GLfloat xNetuno,zNetuno;
 GLfloat xLua,zLua;
 
-float tetaMercurio = 0, velocMercurio = 0.001;
-float tetaVenus = 0, velocVenus = 0.003;
-float tetaTerra = 0, velocTerra = 0.002;
-float tetaMarte = 0, velocMarte = 0.0025;
+float tetaMercurio = 0, velocMercurio = 0.005;
+float tetaVenus = 0, velocVenus = 0.004;
+float tetaTerra = 0, velocTerra = 0.003;
+float tetaMarte = 0, velocMarte = 0.002;
 float tetaJupter = 0, velocJupter = 0.0008;
-float tetaSaturno = 0, velocSaturno = 0.004;
-float tetaUrano = 0, velocUrano = 0.0015;
-float tetaNetuno = 0, velocNetuno = 0.0009;
+float tetaSaturno = 0, velocSaturno = 0.0006;
+float tetaUrano = 0, velocUrano = 0.0004;
+float tetaNetuno = 0, velocNetuno = 0.0002;
 float tetaLua = 0, velocLua = 0.05;
 
 int starsX[QUANTIDADE_ESTRELAS], starsY[QUANTIDADE_ESTRELAS], starsZ[QUANTIDADE_ESTRELAS];
@@ -217,7 +217,7 @@ void Desenha_Planetas(){
     // Mercurio
     glPushMatrix();
     glTranslatef (xMercurio, 0, zMercurio);
-    glRotatef ((GLfloat) day/5, 0.0, 1.0, 0.0);
+    glRotatef ((GLfloat) day/8, 0.0, 1.0, 0.0);
     glColor3f (0.41, 0.41, 0.41);
     if (ativarSolidos == 1) glutSolidSphere(0.2, 25, 25);
     else glutWireSphere(0.2, 25, 25);
@@ -235,7 +235,7 @@ void Desenha_Planetas(){
     // Venus
     glPushMatrix();
     glTranslatef (xVenus, 0, zVenus);
-    glRotatef ((GLfloat) day/3, 0.0, 1.0, 0.0);
+    glRotatef ((GLfloat) day/10, 0.0, 1.0, 0.0);
     glColor3f (1.0, 0.27, 0.0);
     if (ativarSolidos == 1) glutSolidSphere(0.4, 25, 25);
     else glutWireSphere(0.4, 25, 25);
@@ -253,7 +253,7 @@ void Desenha_Planetas(){
     // Terra
     glPushMatrix();
     glTranslatef (xTerra, 0, zTerra);
-    glRotatef ((GLfloat) day, 0.0, 1.0, 0.0);
+    glRotatef ((GLfloat) day/6, 0.0, 1.0, 0.0);
     glColor3f (0.1, 0.1, 1.0);
     if (ativarSolidos == 1) glutSolidSphere(0.3, 25, 25);
     else glutWireSphere(0.3, 25, 25);
@@ -263,7 +263,7 @@ void Desenha_Planetas(){
     glPushMatrix();
     glTranslatef (xTerra, 0, zTerra);
     glTranslatef(xLua, 0, zLua);
-    glRotatef ((GLfloat) day, 0.0, 1.0, 0.0);
+    glRotatef ((GLfloat) day/5, 0.0, 1.0, 0.0);
     glColor3f (0.8, 0.8, 0.8);
     if (ativarSolidos == 1) glutSolidSphere(0.05, 25, 25);
     else glutWireSphere(0.05, 25, 25);
@@ -281,7 +281,7 @@ void Desenha_Planetas(){
     // Marte
     glPushMatrix();
     glTranslatef (xMarte, 0, zMarte);
-    glRotatef ((GLfloat) day/10, 0.0, 1.0, 0.0);
+    glRotatef ((GLfloat) day/6.5, 0.0, 1.0, 0.0);
     glColor3f (1.0, 0.0, 0.0);
     if (ativarSolidos == 1) glutSolidSphere(0.2, 25, 25);
     else glutWireSphere(0.2, 25, 25);
@@ -299,7 +299,7 @@ void Desenha_Planetas(){
     // Jupter
     glPushMatrix();
     glTranslatef (xJupter, 0, zJupter);
-    glRotatef ((GLfloat) day/10, 0.0, 1.0, 0.0);
+    glRotatef ((GLfloat) day/2, 0.0, 1.0, 0.0);
     glColor3f (0.41, 0.41, 0.41);
     if (ativarSolidos == 1) glutSolidSphere(0.8, 25, 25);
     else glutWireSphere(0.8, 25, 25);
@@ -317,7 +317,7 @@ void Desenha_Planetas(){
     // Saturno
     glPushMatrix();
     glTranslatef (xSaturno, 0, zSaturno);
-    glRotatef ((GLfloat) day/10, 0.0, 1.0, 0.0);
+    glRotatef ((GLfloat) day/2.5, 0.0, 1.0, 0.0);
     glColor3f (0.54, 0.27, 0.07);
     if (ativarSolidos == 1) glutSolidSphere(0.45, 25, 25);
     else glutWireSphere(0.45, 25, 25);
@@ -350,7 +350,7 @@ void Desenha_Planetas(){
     // Urano
     glPushMatrix();
     glTranslatef (xUrano, 0, zUrano);
-    glRotatef ((GLfloat) day/2, 0.0, 1.0, 0.0);
+    glRotatef ((GLfloat) day/3, 0.0, 1.0, 0.0);
     glColor3f (0.67, 0.84, 0.90);
     if (ativarSolidos == 1) glutSolidSphere(0.45, 25, 25);
     else glutWireSphere(0.45, 25, 25);
@@ -368,7 +368,7 @@ void Desenha_Planetas(){
     // Netuno
     glPushMatrix();
     glTranslatef (xNetuno, 0, zNetuno);
-    glRotatef ((GLfloat) day, 0.0, 1.0, 0.0);
+    glRotatef ((GLfloat) day/3.5, 0.0, 1.0, 0.0);
     glColor3f (0.0, 0.74, 1.0);
     if (ativarSolidos == 1) glutSolidSphere(0.40, 25, 25);
     else glutWireSphere(0.40, 25, 25);
@@ -676,14 +676,14 @@ void Mouse_Motion(int x, int y) {
 
 void resetar(void){
     // reseta a velocidade
-    velocMercurio = 0.001;
-    velocVenus = 0.003;
-    velocTerra = 0.002;
-    velocMarte = 0.0025;
+    velocMercurio = 0.005;
+    velocVenus = 0.004;
+    velocTerra = 0.003;
+    velocMarte = 0.002;
     velocJupter = 0.0008;
-    velocSaturno = 0.004;
-    velocUrano = 0.0015;
-    velocNetuno = 0.0009;
+    velocSaturno = 0.0006;
+    velocUrano = 0.0004;
+    velocNetuno = 0.0002;
     velocLua = 0.05;
 
     // reseta a camera
